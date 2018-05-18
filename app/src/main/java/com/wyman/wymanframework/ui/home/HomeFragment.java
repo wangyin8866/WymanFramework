@@ -1,18 +1,10 @@
 package com.wyman.wymanframework.ui.home;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.wyman.wymanframework.R;
 import com.wyman.wymanframework.base.BaseFragment;
-import com.wyman.wymanframework.base.BasePresenter;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.wyman.wymanframework.utils.LogUtils;
 
 /**
  * @author wyman
@@ -20,11 +12,11 @@ import butterknife.Unbinder;
  * description :
  */
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment<HomePresenter,HomeView> {
 
     @Override
     protected void initView(View view) {
-
+        LogUtils.e("wyman", mPresenter.toString());
     }
 
     @Override
@@ -33,9 +25,11 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    protected BasePresenter createPresenter() {
-        return null;
+    protected void initInjector() {
+        mFragmentComponent.inject(this);
     }
+
+
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }

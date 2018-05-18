@@ -4,8 +4,6 @@ import android.view.View;
 
 import com.wyman.wymanframework.R;
 import com.wyman.wymanframework.base.BaseFragment;
-import com.wyman.wymanframework.base.BasePresenter;
-import com.wyman.wymanframework.ui.invest.InvestFragment;
 
 /**
  * @author wyman
@@ -26,9 +24,10 @@ public class MyFragment extends BaseFragment {
     }
 
     @Override
-    protected BasePresenter createPresenter() {
-        return null;
+    protected void initInjector() {
     }
+
+
     public static MyFragment newInstance() {
         return new MyFragment();
     }

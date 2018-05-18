@@ -11,25 +11,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.trello.rxlifecycle2.LifecycleTransformer;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.wyman.wymanframework.config.Constant;
 import com.wyman.wymanframework.config.LoadType;
+import com.wyman.wymanframework.di.component.DaggerFragmentComponent;
+import com.wyman.wymanframework.di.component.FragmentComponent;
+import com.wyman.wymanframework.di.module.FragmentModule;
+import com.wyman.wymanframework.di.module.PresenterModule;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.ExtraTransaction;
-import me.yokeyword.fragmentation.ISupportActivity;
 import me.yokeyword.fragmentation.ISupportFragment;
-import me.yokeyword.fragmentation.SupportActivityDelegate;
 import me.yokeyword.fragmentation.SupportFragmentDelegate;
-import me.yokeyword.fragmentation.SupportHelper;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 /**
@@ -39,8 +42,9 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  */
 
 public abstract class BaseFragment<T extends BasePresenter<V>, V extends BaseView> extends RxFragment implements ISupportFragment, BaseView {
-
+    @Inject
     protected T mPresenter;
+    protected FragmentComponent mFragmentComponent;
     protected Context mContext;
     private static final String STATE_SAVE_IS_HIDDEN = "STATE_SAVE_IS_HIDDEN";
     private View mRootView;
@@ -50,16 +54,18 @@ public abstract class BaseFragment<T extends BasePresenter<V>, V extends BaseVie
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDelegate.onCreate(savedInstanceState);
-
-
+        initFragmentComponent();
+        ARouter.getInstance().inject(this);
         mContext = mDelegate.getActivity();
+        initInjector();
 
-        mPresenter = createPresenter();
 
         if (mPresenter != null) {
             mPresenter.attachView((V) this);
         }
-        if (!NetworkUtils.isConnected()) showNoNet();
+        if (!NetworkUtils.isConnected()) {
+            showNoNet();
+        }
         if (savedInstanceState != null) {
             boolean isSupportHidden = savedInstanceState.getBoolean(STATE_SAVE_IS_HIDDEN);
             FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -117,8 +123,19 @@ public abstract class BaseFragment<T extends BasePresenter<V>, V extends BaseVie
 
     protected abstract int getLayoutId();
 
-    protected abstract T createPresenter();
+    protected abstract void initInjector();
 
+    /**
+     * 初始化FragmentComponent
+     */
+    private void initFragmentComponent() {
+        mFragmentComponent = DaggerFragmentComponent.builder()
+                .applicationComponent(((App) getActivity().getApplication()).getApplicationComponent())
+                .fragmentModule(new FragmentModule(this))
+                .presenterModule(new PresenterModule())
+                .build();
+
+    }
 
     @Override
     public void showLoading() {
@@ -186,7 +203,6 @@ public abstract class BaseFragment<T extends BasePresenter<V>, V extends BaseVie
 
     /**
      * 获取设置的全局动画 copy
-     *
      */
     @Override
     public FragmentAnimator getFragmentAnimator() {
@@ -275,7 +291,9 @@ public abstract class BaseFragment<T extends BasePresenter<V>, V extends BaseVie
                 refreshLayout.setRefreshing(false);
                 break;
             case LoadType.TYPE_LOAD_MORE_SUCCESS:
-                if (list != null) baseQuickAdapter.addData(list);
+                if (list != null) {
+                    baseQuickAdapter.addData(list);
+                }
                 break;
             case LoadType.TYPE_LOAD_MORE_ERROR:
                 baseQuickAdapter.loadMoreFail();

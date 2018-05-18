@@ -18,14 +18,14 @@ import java.util.List;
  * description :
  */
 
-public class HomePresenter extends BasePresenter<HomeView>{
+public class HomePresenter extends BasePresenter<HomeView> {
 
     public HomePresenter(Context mContext) {
         super(mContext);
     }
 
     public void fetch() {
-        invoke(RetrofitManager.create(ApiService.class).getHomeBanners(),new ProgressObserver<DataResponse<List<Banner>>>(new SubscriberOnNextListener<DataResponse<List<Banner>>>() {
+        invoke(RetrofitManager.create(ApiService.class).getHomeBanners(), new ProgressObserver<DataResponse<List<Banner>>>(new SubscriberOnNextListener<DataResponse<List<Banner>>>() {
             @Override
             public void onNext(DataResponse<List<Banner>> listDataResponse) {
 
@@ -36,7 +36,7 @@ public class HomePresenter extends BasePresenter<HomeView>{
             public void onError(Throwable e) {
 
             }
-        },mContext));
+        }, mContext));
 
     }
 }

@@ -16,6 +16,8 @@ public class ToastAlone extends Toast {
      */
     private static Toast mToast = null;
 
+
+
     public ToastAlone(Context context) {
         super(context);
         this.context = context;

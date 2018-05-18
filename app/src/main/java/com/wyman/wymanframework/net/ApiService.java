@@ -32,4 +32,5 @@ public interface ApiService {
      */
     @GET("/banner/json")
     Observable<DataResponse<List<Banner>>> getHomeBanners();
+
 }

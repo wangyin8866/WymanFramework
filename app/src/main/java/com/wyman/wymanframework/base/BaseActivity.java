@@ -4,18 +4,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
-import com.wyman.wymanframework.R;
 import com.wyman.wymanframework.config.Constant;
 import com.wyman.wymanframework.config.LoadType;
+import com.wyman.wymanframework.di.component.ActivityComponent;
+import com.wyman.wymanframework.di.component.DaggerActivityComponent;
+import com.wyman.wymanframework.di.module.ActivityModule;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -33,23 +36,23 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  */
 
 public abstract class BaseActivity<T extends BasePresenter<V>, V extends BaseView> extends RxAppCompatActivity implements ISupportActivity, BaseView {
-
+    @Inject
     protected T mPresenter;
     protected Context mContext;
     private Unbinder unbinder;
-
+    protected ActivityComponent mActivityComponent;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDelegate.onCreate(savedInstanceState);
-
+        initActivityComponent();
         int layoutId = getLayoutId();
 
         setContentView(layoutId);
+        initInjector();
         unbinder = ButterKnife.bind(this);
         mContext = this;
 
-        mPresenter = createPresenter();
 
         if (mPresenter != null) {
             mPresenter.attachView((V) this);
@@ -73,9 +76,17 @@ public abstract class BaseActivity<T extends BasePresenter<V>, V extends BaseVie
     protected abstract void initView();
 
     protected abstract int getLayoutId();
+    protected abstract void initInjector();
 
-    protected abstract T createPresenter();
-
+    /**
+     * 初始化ActivityComponent
+     */
+    private void initActivityComponent() {
+        mActivityComponent = DaggerActivityComponent.builder()
+                .applicationComponent(((App) getApplication()).getApplicationComponent())
+                .activityModule(new ActivityModule(this))
+                .build();
+    }
 
     @Override
     public void showSuccess(String message) {
@@ -186,11 +197,14 @@ public abstract class BaseActivity<T extends BasePresenter<V>, V extends BaseVie
                 refreshLayout.setRefreshing(false);
                 break;
             case LoadType.TYPE_LOAD_MORE_SUCCESS:
-                if (list != null) baseQuickAdapter.addData(list);
+                if (list != null) {
+                    baseQuickAdapter.addData(list);
+                }
                 break;
             case LoadType.TYPE_LOAD_MORE_ERROR:
                 baseQuickAdapter.loadMoreFail();
                 break;
+            default:
         }
         if (list == null || list.isEmpty() || list.size() < Constant.PAGE_SIZE) {
             baseQuickAdapter.loadMoreEnd(false);

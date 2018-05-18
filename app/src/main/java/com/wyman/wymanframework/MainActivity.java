@@ -6,19 +6,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.blankj.utilcode.util.ToastUtils;
 import com.wyman.wymanframework.base.BaseActivity;
-import com.wyman.wymanframework.base.BasePresenter;
 import com.wyman.wymanframework.ui.home.HomeFragment;
 import com.wyman.wymanframework.ui.invest.InvestFragment;
 import com.wyman.wymanframework.ui.my.MyFragment;
+import com.wyman.wymanframework.utils.LogUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.yokeyword.fragmentation.ISupportFragment;
 
+@Route(path = "/app/MainActivity")
 public class MainActivity extends BaseActivity {
-
     @BindView(R.id.id_tab_iv_01)
     ImageView idTabIv01;
     @BindView(R.id.id_tab_tv_01)
@@ -46,19 +47,23 @@ public class MainActivity extends BaseActivity {
     private ISupportFragment[] mFragments = new ISupportFragment[4];
     private long mExitTime;
     public static int currentPage;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
     }
 
     @Override
-    protected BasePresenter createPresenter() {
-        return null;
+    protected void initInjector() {
     }
 
 
     @Override
     protected void initView() {
+
+
+
+
         ISupportFragment homeFragment = findFragment(HomeFragment.class);
         if (homeFragment == null) {
             mFragments[0] = HomeFragment.newInstance();
@@ -80,7 +85,6 @@ public class MainActivity extends BaseActivity {
         }
         setTabSelection(currentPage);
     }
-
 
 
     public void setTabSelection(int currentPage) {
@@ -105,6 +109,7 @@ public class MainActivity extends BaseActivity {
                 break;
         }
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -128,7 +133,6 @@ public class MainActivity extends BaseActivity {
     public void hideLoading() {
 
     }
-
 
 
     @OnClick({R.id.id_tab_ll_01, R.id.id_tab_ll_02, R.id.id_tab_ll_03, R.id.id_tab_ll_04})
@@ -155,6 +159,7 @@ public class MainActivity extends BaseActivity {
         }
         setTabSelection(currentPage);
     }
+
     /**
      * 重置所有状态
      */
