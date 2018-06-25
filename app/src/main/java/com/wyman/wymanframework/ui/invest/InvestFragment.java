@@ -25,6 +25,7 @@ public class InvestFragment extends BaseFragment {
 
     @Override
     protected void initInjector() {
+
     }
 
 

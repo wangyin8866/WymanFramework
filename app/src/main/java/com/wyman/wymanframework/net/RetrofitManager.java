@@ -1,8 +1,9 @@
-package com.wyman.wymanframework.base;
+package com.wyman.wymanframework.net;
 
 
 import com.blankj.utilcode.util.NetworkUtils;
 import com.google.gson.Gson;
+import com.wyman.wymanframework.base.App;
 import com.wyman.wymanframework.config.NetConstantValues;
 import com.wyman.wymanframework.utils.LogUtils;
 

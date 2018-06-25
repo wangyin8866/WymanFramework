@@ -3,7 +3,7 @@ package com.wyman.wymanframework.ui.home;
 import android.content.Context;
 
 import com.wyman.wymanframework.base.BasePresenter;
-import com.wyman.wymanframework.base.RetrofitManager;
+import com.wyman.wymanframework.net.RetrofitManager;
 import com.wyman.wymanframework.entity.Banner;
 import com.wyman.wymanframework.entity.DataResponse;
 import com.wyman.wymanframework.net.ApiService;
