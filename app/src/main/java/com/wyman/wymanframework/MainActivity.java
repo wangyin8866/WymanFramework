@@ -12,7 +12,6 @@ import com.wyman.wymanframework.base.BaseActivity;
 import com.wyman.wymanframework.ui.home.HomeFragment;
 import com.wyman.wymanframework.ui.invest.InvestFragment;
 import com.wyman.wymanframework.ui.my.MyFragment;
-import com.wyman.wymanframework.utils.LogUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -48,6 +47,7 @@ public class MainActivity extends BaseActivity {
     private long mExitTime;
     public static int currentPage;
 
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -58,10 +58,10 @@ public class MainActivity extends BaseActivity {
     }
 
 
+
+
     @Override
     protected void initView() {
-
-
 
 
         ISupportFragment homeFragment = findFragment(HomeFragment.class);
@@ -84,7 +84,11 @@ public class MainActivity extends BaseActivity {
             mFragments[3] = findFragment(InvestFragment.class);
         }
         setTabSelection(currentPage);
+
+
     }
+
+
 
 
     public void setTabSelection(int currentPage) {

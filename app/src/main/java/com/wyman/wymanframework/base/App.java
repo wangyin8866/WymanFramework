@@ -9,7 +9,6 @@ import com.wyman.wymanframework.BuildConfig;
 import com.wyman.wymanframework.di.component.ApplicationComponent;
 import com.wyman.wymanframework.di.component.DaggerApplicationComponent;
 import com.wyman.wymanframework.di.module.ApplicationModule;
-import com.wyman.wymanframework.utils.LogUtils;
 
 import me.yokeyword.fragmentation.Fragmentation;
 
@@ -29,7 +28,7 @@ public class App extends Application {
         initApplicationComponent();
         Fragmentation.builder().stackViewMode(Fragmentation.BUBBLE).debug(true).install();
         //是否打印日志
-        LogUtils.isDebug = BuildConfig.IS_SHOW_LOG;
+//        LogUtils.isDebug = BuildConfig.DEBUG;
         initARouter();
         Utils.init(this);
     }
