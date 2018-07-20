@@ -16,7 +16,11 @@ android {
         }
         multiDexEnabled true
     }
-
+    repositories {
+        maven {
+            url "http://maven.aliyun.com/nexus/content/repositories/releases"
+        }
+    }
     signingConfigs {
         config {
 //            keyAlias RELEASE_KEY_ALIAS
@@ -90,4 +94,6 @@ dependencies {
     implementation rootProject.ext.dependencies["dbflow-core"]
     implementation rootProject.ext.dependencies["dbflow"]
     implementation rootProject.ext.dependencies["dbflow-sqlcipher"]
+
+    implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.4'
 }
