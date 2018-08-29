@@ -21,9 +21,9 @@ public  class BasePresenter<T extends BaseView> {
     private WeakReference<T> mVReference;
     protected Context mContext;
 
-    protected <T> void invoke(Observable<T> observable, Observer<T> observer) {
+    protected <V> void invoke(Observable<V> observable, Observer<V> observer) {
         observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).compose(getView().<T>bindToLife()).subscribe(observer);
+                .observeOn(AndroidSchedulers.mainThread()).compose(getView().<V>bindToLife()).subscribe(observer);
     }
 
     public BasePresenter(Context mContext) {

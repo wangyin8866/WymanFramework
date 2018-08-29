@@ -31,6 +31,10 @@ public class App extends Application {
 //        LogUtils.isDebug = BuildConfig.DEBUG;
         initARouter();
         Utils.init(this);
+
+
+
+
     }
     /**
      * 初始化路由
